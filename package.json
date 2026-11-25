@@ -1,0 +1,13 @@
+{
+  "name": "vps-monitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --check server.js && node --check public/app.js"
+  },
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "commonjs"
+}

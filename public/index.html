@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0C0D11">
+<title>VPS Telemetry</title>
+<link rel="preload" href="/monitor/fonts/JetBrainsMono-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/monitor/style.css?v=4">
+</head>
+<body>
+<header class="top">
+  <h1>Telemetry <span id="host" class="host">-</span></h1>
+  <p class="status"><span id="conn" class="dot wait">menghubungkan</span><span id="age"></span><span id="info" class="hide-sm"></span></p>
+</header>
+
+<section id="diag" class="diag ok" aria-live="polite">
+  <strong id="diag-level">-</strong>
+  <ul id="diag-lines"><li>Menunggu data pertama.</li></ul>
+</section>
+
+<main class="grid">
+  <section class="p span8" aria-labelledby="h-wave">
+    <h2 class="lbl" id="h-wave"><span>01 · CPU &amp; RAM · 60 detik terakhir</span><b id="rate">-</b></h2>
+    <div class="hero-head">
+      <div><p class="big"><span id="cpu-val">-</span><small>% CPU</small></p><p class="sub" id="cpu-sub">rata-rata 1 dtk</p></div>
+      <div><p class="big amber"><span id="mem-pct">-</span><small>% RAM</small></p><p class="sub" id="mem-sub2"></p></div>
+      <p class="legend" aria-hidden="true"><span><i></i>CPU</span><span class="ram"><i></i>RAM</span></p>
+    </div>
+    <canvas id="wave" aria-hidden="true"></canvas>
+    <div class="axis" aria-hidden="true"><span>-60 dtk</span><span>-30 dtk</span><span>sekarang</span></div>
+  </section>
+
+  <section class="p span4" aria-labelledby="h-core">
+    <h2 class="lbl" id="h-core"><span>02 · Per core</span><b id="core-n"></b></h2>
+    <div class="cores" id="cores"></div>
+    <p class="sub" id="load"></p>
+  </section>
+
+  <section class="p span4" aria-labelledby="h-mem">
+    <h2 class="lbl" id="h-mem"><span>03 · Memori</span><b id="mem-total"></b></h2>
+    <div class="stack" aria-hidden="true"><i id="st-app" class="s-app"></i><i id="st-buf" class="s-buf"></i><i id="st-cache" class="s-cache"></i></div>
+    <dl class="kv">
+      <div><dt><i class="sw s-app"></i>Dipakai aplikasi</dt><dd id="kv-app">-</dd></div>
+      <div><dt><i class="sw s-buf"></i>Buffer</dt><dd id="kv-buf">-</dd></div>
+      <div><dt><i class="sw s-cache"></i>Cache (bisa dilepas)</dt><dd id="kv-cache">-</dd></div>
+      <div><dt><i class="sw"></i>Kosong</dt><dd id="kv-free">-</dd></div>
+      <div><dt>Tersedia untuk aplikasi</dt><dd id="kv-avail">-</dd></div>
+      <div><dt>Swap</dt><dd id="kv-swap">-</dd></div>
+    </dl>
+    <div class="bar"><i id="swap-bar"></i></div>
+  </section>
+
+  <section class="p span4" aria-labelledby="h-disk">
+    <h2 class="lbl" id="h-disk"><span>04 · Disk</span><b>baca + tulis · rata-rata 1 dtk</b></h2>
+    <p class="big mid" id="disk-val">-</p>
+    <canvas id="disk" class="mini" aria-hidden="true"></canvas>
+    <p class="sub" id="disk-sub"></p>
+    <div id="disk-usage"></div>
+  </section>
+
+  <section class="p span4" aria-labelledby="h-net">
+    <h2 class="lbl" id="h-net"><span>05 · Network</span><b id="iface"></b></h2>
+    <div class="pair">
+      <p><span class="k">Masuk</span><span class="big mid" id="rx">-</span></p>
+      <p class="amber"><span class="k">Keluar</span><span class="big mid" id="tx">-</span></p>
+    </div>
+    <canvas id="net" class="mini" aria-hidden="true"></canvas>
+    <p class="sub">garis tegas = masuk · garis putus = keluar</p>
+  </section>
+
+  <section class="p span8" aria-labelledby="h-proc">
+    <div class="lbl-row">
+      <h2 class="lbl" id="h-proc"><span>06 · Proses paling berat</span></h2>
+      <div class="seg" id="seg" data-v="cpu" role="group" aria-label="Urutkan proses">
+        <span class="thumb" aria-hidden="true"></span>
+        <button type="button" data-v="cpu" aria-pressed="true">CPU</button>
+        <button type="button" data-v="mem" aria-pressed="false">RAM</button>
+      </div>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th class="n">PID</th><th class="grp">Aplikasi</th><th class="hide-sm">Perintah</th><th class="n" id="th-cpu" aria-sort="descending">CPU %</th><th class="n" id="th-mem" aria-sort="none">RAM</th><th class="share hide-sm"><span class="sr">Porsi</span></th></tr></thead>
+      <tbody id="tb-proc"></tbody>
+    </table></div>
+  </section>
+
+  <section class="p span4" aria-labelledby="h-grp">
+    <h2 class="lbl" id="h-grp"><span>07 · Aplikasi paling berat</span></h2>
+    <div class="tw"><table>
+      <thead><tr><th>Aplikasi</th><th class="n c2">Proses</th><th class="n">CPU %</th><th class="n">RAM</th></tr></thead>
+      <tbody id="tb-groups"></tbody>
+    </table></div>
+  </section>
+</main>
+
+<footer class="foot" id="foot">CPU % proses = persen dari total seluruh core.</footer>
+<script src="/monitor/app.js?v=4" defer></script>
+</body>
+</html>
